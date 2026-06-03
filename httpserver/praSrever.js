@@ -1,7 +1,7 @@
-const http = require("http");
-const fs = require("fs");
+// const http = require("http");
+// const fs = require("fs");
 
-const path = require("path");
+// const path = require("path");
 // practice on 2.4
 
 // const server = http.createServer((req, res) => {
@@ -40,62 +40,40 @@ const path = require("path");
 // });
 // practice on 2.6
 
-const url = require("url");
-const mimetypelookup = require("mime-types").lookup;
-const server = http.createServer((req, res) => {
-  const parsedUrl = url.parse(req.url, true);
-  let filePath = parsedUrl.path;
-
-  if (filePath == "/") {
-    filePath = "/index.html";
-  }
-
-  var requestedFile = __dirname + "/apple/" + filePath;
-  fs.readFile(requestedFile, (err, data) => {
-    if (err) {
-      console.error("Error reading file:", err);
-      return;
-    } else {
-      let mime = mimetypelookup(filePath);
-      res.writeHead(200, {
-        "Content-Type": mime,
-      });
-      res.end(data);
-    }
-  });
-});
-
-server.listen(3000, () => {
-  console.log("server is  running on port 3000");
-});
-
-// // Create the Server Object
-// const server = http.createServer(function (req, res) {
-//   // console.log(req);
+// const url = require("url");
+// const mimetypelookup = require("mime-types").lookup;
+// const server = http.createServer((req, res) => {
 //   const parsedUrl = url.parse(req.url, true);
-//   // console.log(parsedUrl);
-
-//   // // Requested file name
 //   let filePath = parsedUrl.path;
-//   // console.log(filePath);
+
 //   if (filePath == "/") {
 //     filePath = "/index.html";
 //   }
+
 //   var requestedFile = __dirname + "/apple/" + filePath;
-//   // console.log(requestedFile);
-//   const readFile = fs.readFile(requestedFile, function (err, content) {
+//   fs.readFile(requestedFile, (err, data) => {
 //     if (err) {
-//       res.writeHead(404);
-//       res.end();
+//       console.error("Error reading file:", err);
+//       return;
 //     } else {
 //       let mime = mimetypelookup(filePath);
-//       res.writeHead(200, { "content-type": mime });
-//       res.end(content);
+//       res.writeHead(200, {
+//         "Content-Type": mime,
+//       });
+//       res.end(data);
 //     }
 //   });
 // });
 
-// // Call the listen method to tell the server which port to listen to
-// server.listen(3000, function () {
-//   console.log("Listening to port 3000");
+// server.listen(3000, () => {
+//   console.log("server is  running on port 3000");
+// });
+
+// // practice on 2.7
+// const express = require("express");
+// let app = express();
+
+// app.use(express.static("apple"));
+// app.listen(3000, () => {
+//   console.log("running on port 3000");
 // });
