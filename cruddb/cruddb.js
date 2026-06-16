@@ -1,5 +1,4 @@
-const mysql = require("mysql2");
-
+const mysql = require("mysql2/promise");
 let connection = mysql.createConnection({
   host: "localhost",
   user: "mesud",
@@ -35,24 +34,7 @@ let connection = mysql.createConnection({
 //   console.table(results);
 // });
 
-// let update = "UPDATE task SET taskName = ? WHERE task_id = ?";
-
-// connection.query(update, ["study", 1], (err, results) => {
-//   if (err) {
-//     console.log("error on updating   ", err);
-//     return;
-//   }
-//   console.log("updated");
-// });
-
-// let deleteS = "DELETE FROM task WHERE task_id = 5";
-// connection.query(deleteS, (err, results) => {
-//   if (err) {
-//     console.log("error on DELETING   ", err);
-//     return;
-//   }
-//   console.table("deleted");
-// });
+//
 
 // connection.end((err) => {
 //   if (err) {
@@ -102,22 +84,41 @@ connection.connect((err) => {
             console.log("error on inserting  tasks   ", err);
             return;
           }
+          let ids = results.insertId;
           console.log("task inserted");
-          let select = "SELECT * FROM tasks WHERE users_id=1 ";
 
-          connection.query(select, (err, results) => {
+          let select = "SELECT * FROM tasks WHERE users_id=? ";
+
+          connection.query(select, [id], (err, results) => {
             if (err) {
               console.log("error on SELECTING   ", err);
               return;
             }
             console.table(results);
-            connection.end((err) => {
+            let update = "UPDATE tasks SET title  = ? WHERE tasks_id = ?";
+
+            connection.query(update, ["study", ids], (err, results) => {
               if (err) {
-                console.error("Error during disconnection:", err.message);
+                console.log("error on updating   ", err);
                 return;
-              } else {
-                console.log("Connection closed cleanly.");
               }
+              console.log("updated");
+              let deleteS = "DELETE FROM tasks WHERE tasks_id = ?";
+              connection.query(deleteS, [ids], (err, results) => {
+                if (err) {
+                  console.log("error on DELETING   ", err);
+                  return;
+                }
+                console.log("deleted");
+                connection.end((err) => {
+                  if (err) {
+                    console.error("Error during disconnection:", err.message);
+                    return;
+                  } else {
+                    console.log("Connection closed cleanly.");
+                  }
+                });
+              });
             });
           });
         });
